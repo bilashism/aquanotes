@@ -1,9 +1,74 @@
-import React from 'react';
+import { useReducer } from 'react';
 import { useForm } from 'react-hook-form';
 
-type FormData = {
-  goalInp: number;
+enum GoalActionKind {
+  GLASS_SIZE = 'GLASS_SIZE',
+  WATER_AMOUNT = 'WATER_AMOUNT',
+}
+interface GoalAction {
+  type: GoalActionKind;
+  payload: number;
+}
+
+type GoalFormData = {
+  waterAmount: number;
   glassSize: number;
+};
+
+interface GoalState {
+  waterAmount: number;
+  glassSize: number;
+  waterInML?: number;
+  totalGlasses?: number;
+}
+
+/**
+ * This function takes a number as an argument and returns a number.
+ * @param {number} liter - number -&gt; The liter value that you want to convert to ml.
+ */
+const literToMl = (liter: number): number => liter * 1000;
+
+/**
+ * "Given a number of liters of water and a glass size, return the number of glasses needed to hold
+ * that water."
+ *
+ * The function takes two arguments:
+ *
+ * water: number
+ * glassSize: number
+ * And returns a number
+ * @param {number} water - number - the amount of water in liters
+ * @param {number} glassSize - The size of the glass in ml
+ * @returns The total number of glasses needed to drink the amount of water.
+ */
+const calculateTotalGlasses = (water: number, glassSize: number): number => {
+  return Math.ceil(literToMl(water) / glassSize);
+};
+
+/**
+ * It takes a state and an action and returns a new state
+ * @param {GoalState} state - GoalState
+ * @param {GoalAction}  - GoalState - the type of the state
+ * @returns The goalReducer is returning the state.
+ */
+const goalReducer = (state: GoalState, { type, payload }: GoalAction) => {
+  switch (type) {
+    case GoalActionKind.WATER_AMOUNT:
+      return {
+        ...state,
+        waterAmount: payload,
+        waterInML: literToMl(payload),
+        totalGlasses: calculateTotalGlasses(payload, state.glassSize),
+      };
+    case GoalActionKind.GLASS_SIZE:
+      return {
+        ...state,
+        glassSize: payload,
+        totalGlasses: calculateTotalGlasses(state.waterAmount, payload),
+      };
+    default:
+      return state;
+  }
 };
 
 const Goals = () => {
@@ -12,9 +77,15 @@ const Goals = () => {
     handleSubmit,
     formState,
     formState: { isSubmitSuccessful },
-  } = useForm<FormData>();
+  } = useForm<GoalFormData>();
 
-  const setGoal = (data: FormData): void => {
+  const [{ waterAmount, glassSize, waterInML, totalGlasses }, dispatch] =
+    useReducer(goalReducer, {
+      waterAmount: 2,
+      glassSize: 250,
+    });
+
+  const setGoal = (data: GoalFormData): void => {
     console.log(data);
   };
 
@@ -33,22 +104,30 @@ const Goals = () => {
             <span className="placeholder absolute top-0 w-full text-center m-0 block">
               88.88
             </span>
-            <span className="goal-label relative m-0 block w-full">06.75</span>{' '}
+            <span className="goal-label text-cyan-600 relative m-0 block w-full">
+              0{parseFloat(`${waterAmount}`).toFixed(2)}
+            </span>{' '}
           </label>{' '}
           <input
             id="goal-inp"
             className="goal-inp m-0 w-full"
             type="range"
-            min="00"
-            max="15"
-            step=".05"
-            defaultValue="2"
+            min=".5"
+            max="6"
+            step=".1"
+            defaultValue={waterAmount}
             autoComplete="off"
             title="In liters"
-            {...register('goalInp', {
+            {...register('waterAmount', {
               required: 'Please provide a goal',
               valueAsNumber: true,
             })}
+            onChange={(ev) =>
+              dispatch({
+                type: GoalActionKind.WATER_AMOUNT,
+                payload: ev.target.valueAsNumber,
+              })
+            }
           />
         </div>
         <div className="flex justify-between items-center mb-3 w-full">
@@ -63,8 +142,15 @@ const Goals = () => {
                 required: 'Please select a goal',
                 valueAsNumber: true,
               })}
+              defaultValue={glassSize}
+              onChange={(ev) => {
+                dispatch({
+                  type: GoalActionKind.GLASS_SIZE,
+                  payload: Number(ev.target.value),
+                });
+              }}
             >
-              <option className="text-dark" value="125" defaultValue="125">
+              <option className="text-dark" value="125">
                 125ml
               </option>
               <option className="text-dark" value="250">
@@ -91,7 +177,7 @@ const Goals = () => {
       </form>
       <div
         className="capitalize flex sm:flex-col justify-between xl:order-first"
-        title="1 glass = 125ml"
+        title={`1 glass = ${glassSize}ml`}
       >
         <p className="d-inline-flex align-items-end">
           <span className="inline-flex items-center gap-2" title="Total intake">
@@ -204,7 +290,7 @@ const Goals = () => {
               />
             </svg>{' '}
           </span>
-          <span className="">6750ml</span>
+          <span className="">{waterInML || literToMl(waterAmount)}ml</span>
         </p>
         <p className="inline-flex items-end">
           <span className="inline-flex items-center gap-2" title="Total glass">
@@ -262,7 +348,9 @@ const Goals = () => {
               />
             </svg>{' '}
           </span>
-          <span className="count-glass lead num-font">54</span>
+          <span className="count-glass lead num-font">
+            {totalGlasses || calculateTotalGlasses(waterAmount, glassSize)}
+          </span>
         </p>
       </div>
     </div>
