@@ -1,5 +1,6 @@
 import React from 'react';
 import { ScrollRestoration } from 'react-router-dom';
+import DigitalClock from '../components/ui/DigitalClock';
 import Navbar from '../pages/shared/Navbar';
 
 const Main = () => {
@@ -7,6 +8,7 @@ const Main = () => {
     <>
       <ScrollRestoration />
       <Navbar />
+      <DigitalClock />
     </>
   );
 };
