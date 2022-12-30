@@ -14,8 +14,13 @@
     "package-update": "ncu --interactive --format group"
   },
   "dependencies": {
+    "@tanstack/react-query": "^4.20.4",
+    "framer-motion": "^8.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.41.2",
+    "react-hot-toast": "^2.4.0",
+    "react-icons": "^4.7.1",
     "react-router-dom": "^6.6.1"
   },
   "devDependencies": {
@@ -48,12 +53,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bilashism/Aquanotes.git"
+    "url": "git+https://github.com/bilashism/aquanotes.git"
   },
   "keywords": [],
   "author": "Md. Taifuzzaman Bilash <bilashism@gmail.com>",
   "bugs": {
-    "url": "https://github.com/bilashism/Aquanotes/issues"
+    "url": "https://github.com/bilashism/aquanotes/issues"
   },
-  "homepage": "https://github.com/bilashism/Aquanotes#readme"
+  "homepage": "https://github.com/bilashism/aquanotes#readme"
 }
