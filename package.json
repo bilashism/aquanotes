@@ -1,7 +1,10 @@
 {
   "name": "aquanotes",
+  "description": "",
   "private": true,
   "version": "0.0.0",
+  "license": "MIT",
+  "main": "index.js",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -43,5 +46,14 @@
     "vite-plugin-mkcert": "^1.10.1",
     "vitest": "^0.26.2"
   },
-  "license": "MIT"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bilashism/Aquanotes.git"
+  },
+  "keywords": [],
+  "author": "Md. Taifuzzaman Bilash <bilashism@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/bilashism/Aquanotes/issues"
+  },
+  "homepage": "https://github.com/bilashism/Aquanotes#readme"
 }
