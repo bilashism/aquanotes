@@ -24,6 +24,18 @@ module.exports = {
       2,
       { namedComponents: 'arrow-function' },
     ],
+    'jsx-a11y/label-has-associated-control': [
+      2,
+      {
+        assert: 'htmlFor',
+      },
+    ],
+    'react/jsx-props-no-spreading': [
+      2,
+      {
+        html: 'ignore',
+      },
+    ],
     'prettier/prettier': [
       'error',
       {
