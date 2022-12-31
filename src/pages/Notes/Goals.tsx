@@ -1,9 +1,12 @@
-import { useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
+import GoalNote from './GoalNote';
 
 enum GoalActionKind {
   GLASS_SIZE = 'GLASS_SIZE',
   WATER_AMOUNT = 'WATER_AMOUNT',
+  CREATE_GOAL_NOTE = 'CREATE_GOAL_NOTE',
 }
 interface GoalAction {
   type: GoalActionKind;
@@ -20,6 +23,7 @@ interface GoalState {
   glassSize: number;
   waterInML?: number;
   totalGlasses?: number;
+  notesArr?: number[];
 }
 
 /**
@@ -59,32 +63,70 @@ const goalReducer = (state: GoalState, { type, payload }: GoalAction) => {
         waterAmount: payload,
         waterInML: literToMl(payload),
         totalGlasses: calculateTotalGlasses(payload, state.glassSize),
+        notesArr: [],
       };
     case GoalActionKind.GLASS_SIZE:
       return {
         ...state,
         glassSize: payload,
         totalGlasses: calculateTotalGlasses(state.waterAmount, payload),
+        notesArr: [],
+      };
+    case GoalActionKind.CREATE_GOAL_NOTE:
+      localStorage.setItem(
+        GoalActionKind.CREATE_GOAL_NOTE,
+        JSON.stringify(Array.from(Array(payload).keys()))
+      );
+      return {
+        ...state,
+        notesArr: Array.from(Array(payload).keys()),
       };
     default:
       return state;
   }
 };
-
 const Goals = () => {
   const { register, handleSubmit } = useForm<GoalFormData>();
 
-  const [{ waterAmount, glassSize, waterInML, totalGlasses }, dispatch] =
-    useReducer(goalReducer, {
-      waterAmount: 2,
-      glassSize: 250,
-      waterInML: literToMl(2),
-      totalGlasses: calculateTotalGlasses(2, 250),
-    });
+  const [
+    { waterAmount, glassSize, waterInML, totalGlasses, notesArr },
+    dispatch,
+  ] = useReducer(goalReducer, {
+    waterAmount: Number(localStorage.getItem(GoalActionKind.WATER_AMOUNT)) || 2,
+    glassSize: Number(localStorage.getItem(GoalActionKind.GLASS_SIZE)) || 250,
+    waterInML: literToMl(
+      Number(localStorage.getItem(GoalActionKind.WATER_AMOUNT)) || 2
+    ),
+    totalGlasses: calculateTotalGlasses(
+      Number(localStorage.getItem(GoalActionKind.WATER_AMOUNT)) || 2,
+      Number(localStorage.getItem(GoalActionKind.GLASS_SIZE)) || 250
+    ),
+    notesArr:
+      JSON.parse(localStorage.getItem(GoalActionKind.CREATE_GOAL_NOTE) ?? '') ||
+      [],
+  });
 
   const setGoal = (data: GoalFormData): void => {
     dispatch({ type: GoalActionKind.WATER_AMOUNT, payload: data.waterAmount });
+    localStorage.setItem(GoalActionKind.WATER_AMOUNT, `${data.waterAmount}`);
+
     dispatch({ type: GoalActionKind.GLASS_SIZE, payload: data.glassSize });
+    localStorage.setItem(GoalActionKind.GLASS_SIZE, `${data.glassSize}`);
+
+    dispatch({
+      type: GoalActionKind.CREATE_GOAL_NOTE,
+      payload: calculateTotalGlasses(data.waterAmount, data.glassSize),
+    });
+    // localStorage.setItem(
+    //   'goalNotes',
+    //   JSON.stringify({
+    //     glassSize,
+    //     waterAmount,
+    //     totalGlasses,
+    //     notesArr: Array.from(Array(totalGlasses).keys()),
+    //   })
+    // );
+    toast.success(`Your goal is set to ${waterInML}ml/day 🎉`);
   };
 
   return (
@@ -141,12 +183,12 @@ const Goals = () => {
                 valueAsNumber: true,
               })}
               defaultValue={glassSize}
-              onChange={(ev) => {
+              onChange={(ev) =>
                 dispatch({
                   type: GoalActionKind.GLASS_SIZE,
                   payload: Number(ev.target.value),
-                });
-              }}
+                })
+              }
             >
               <option className="text-dark" value="125">
                 125ml
@@ -351,6 +393,9 @@ const Goals = () => {
           </span>
         </p>
       </div>
+      {notesArr?.map((glass) => (
+        <GoalNote key={`glass-${glass}`} idx={glass} />
+      ))}
     </div>
   );
 };
