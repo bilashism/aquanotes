@@ -72,21 +72,19 @@ const goalReducer = (state: GoalState, { type, payload }: GoalAction) => {
 };
 
 const Goals = () => {
-  const {
-    register,
-    handleSubmit,
-    formState,
-    formState: { isSubmitSuccessful },
-  } = useForm<GoalFormData>();
+  const { register, handleSubmit } = useForm<GoalFormData>();
 
   const [{ waterAmount, glassSize, waterInML, totalGlasses }, dispatch] =
     useReducer(goalReducer, {
       waterAmount: 2,
       glassSize: 250,
+      waterInML: literToMl(2),
+      totalGlasses: calculateTotalGlasses(2, 250),
     });
 
   const setGoal = (data: GoalFormData): void => {
-    console.log(data);
+    dispatch({ type: GoalActionKind.WATER_AMOUNT, payload: data.waterAmount });
+    dispatch({ type: GoalActionKind.GLASS_SIZE, payload: data.glassSize });
   };
 
   return (
