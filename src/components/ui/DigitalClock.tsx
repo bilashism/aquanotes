@@ -25,7 +25,14 @@ const DigitalClock = () => {
   return (
     <figure className="">
       <div className="container px-4 mx-auto">Digital Clock</div>
-      <p className="">{moment(count).format('LTS')}</p>
+      <p className="">{moment(count).format('hh:mm:ss A')}</p>
+      <div className="">
+        <p className="">{moment(count).format('dddd')}</p>
+        <p className="">{moment.weekdays()}</p>
+      </div>
+      <p className="">{moment().date()}</p>
+      <p className="">{moment().format('MMM')}</p>
+      <p className="">{moment().year()}</p>
     </figure>
   );
 };
