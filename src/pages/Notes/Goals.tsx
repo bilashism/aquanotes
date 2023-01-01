@@ -132,116 +132,126 @@ const Goals = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-4 justify-center md:justify-between sticky top-0 left-0">
-      <form
-        className="flex flex-col justify-center gap-8"
-        method="post"
-        onSubmit={handleSubmit(setGoal)}
-      >
-        <div className="flex flex-col gap-4 w-full">
-          <label
-            className="relative flex justify-center font-bold text-center isolate z-10 font-['digital7'] text-4xl xl:text-6xl"
-            htmlFor="goal-inp"
-          >
-            <span className="absolute top-0 block -z-10 text-gray-200">
-              88.88
-            </span>
-            <span className="text-emerald-500 relative block">
-              0{parseFloat(`${waterAmount}`).toFixed(2)}
-            </span>{' '}
-          </label>{' '}
-          <input
-            id="goal-inp"
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer "
-            type="range"
-            min=".5"
-            max="6"
-            step=".1"
-            defaultValue={waterAmount}
-            autoComplete="off"
-            title="In liters"
-            {...register('waterAmount', {
-              required: 'Please provide a goal',
-              valueAsNumber: true,
-            })}
-            onChange={(ev) =>
-              dispatch({
-                type: GoalActionKind.WATER_AMOUNT,
-                payload: ev.target.valueAsNumber,
-              })
-            }
-          />
-        </div>
-        <div className="flex flex-col md:flex-row gap-4 justify-between items-center w-full">
-          <div className="">
-            <label className="mb-0 mr-2" htmlFor="glass-size">
-              Glass Size
-            </label>
-            <select
-              id="glass-size"
-              className="border px-4 py-2"
-              {...register('glassSize', {
-                required: 'Please select a goal',
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-4 justify-center md:justify-between sticky top-0 left-0">
+        <form
+          className="flex flex-col justify-center gap-8"
+          method="post"
+          onSubmit={handleSubmit(setGoal)}
+        >
+          <div className="flex flex-col gap-4 w-full">
+            <label
+              className="relative flex justify-center font-bold text-center isolate z-10 font-['digital7'] text-4xl xl:text-6xl"
+              htmlFor="goal-inp"
+            >
+              <span className="absolute top-0 block -z-10 text-gray-200">
+                88.88
+              </span>
+              <span className="text-emerald-500 relative block">
+                0{parseFloat(`${waterAmount}`).toFixed(2)}
+              </span>{' '}
+            </label>{' '}
+            <input
+              id="goal-inp"
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer "
+              type="range"
+              min=".5"
+              max="6"
+              step=".1"
+              defaultValue={waterAmount}
+              autoComplete="off"
+              title="In liters"
+              {...register('waterAmount', {
+                required: 'Please provide a goal',
                 valueAsNumber: true,
               })}
-              defaultValue={glassSize}
               onChange={(ev) =>
                 dispatch({
-                  type: GoalActionKind.GLASS_SIZE,
-                  payload: Number(ev.target.value),
+                  type: GoalActionKind.WATER_AMOUNT,
+                  payload: ev.target.valueAsNumber,
                 })
               }
-            >
-              <option className="text-dark" value="125">
-                125ml
-              </option>
-              <option className="text-dark" value="250">
-                250ml
-              </option>
-              <option className="text-dark" value="500">
-                500ml
-              </option>
-              <option className="text-dark" value="750">
-                750ml
-              </option>
-              <option className="text-dark" value="1000">
-                1000ml
-              </option>
-            </select>
+            />
           </div>
-          <button
-            className="border inline-flex justify-center items-center bg-emerald-500 hover:bg-emerald-700 text-white transition-colors py-2 px-6 font-bold"
-            type="submit"
-          >
-            Set Goal!
-          </button>
+          <div className="flex flex-col md:flex-row gap-4 justify-between items-center w-full">
+            <div className="">
+              <label className="mb-0 mr-2" htmlFor="glass-size">
+                Glass Size
+              </label>
+              <select
+                id="glass-size"
+                className="border px-4 py-2"
+                {...register('glassSize', {
+                  required: 'Please select a goal',
+                  valueAsNumber: true,
+                })}
+                defaultValue={glassSize}
+                onChange={(ev) =>
+                  dispatch({
+                    type: GoalActionKind.GLASS_SIZE,
+                    payload: Number(ev.target.value),
+                  })
+                }
+              >
+                <option className="text-dark" value="125">
+                  125ml
+                </option>
+                <option className="text-dark" value="250">
+                  250ml
+                </option>
+                <option className="text-dark" value="500">
+                  500ml
+                </option>
+                <option className="text-dark" value="750">
+                  750ml
+                </option>
+                <option className="text-dark" value="1000">
+                  1000ml
+                </option>
+              </select>
+            </div>
+            <button
+              className="border inline-flex justify-center items-center bg-emerald-500 hover:bg-emerald-700 text-white transition-colors py-2 px-6 font-bold"
+              type="submit"
+            >
+              Set Goal!
+            </button>
+          </div>
+        </form>
+        <div
+          className="capitalize flex flex-wrap gap-8 justify-around items-center xl:order-first"
+          title={`1 glass = ${glassSize}ml`}
+        >
+          <p className="inline-flex flex-col text-center items-center">
+            <span
+              className="inline-flex items-center gap-2"
+              title="Total intake"
+            >
+              {<FaGlassWhiskey className="w-20 h-20" />}{' '}
+            </span>
+            <span className="text-emerald-500">
+              {waterInML || literToMl(waterAmount)}ml
+            </span>
+          </p>
+          <p className="inline-flex flex-col text-center items-center">
+            <span
+              className="inline-flex items-center gap-2"
+              title="Total glass"
+            >
+              {<CiGlass className="w-20 h-20" />}{' '}
+            </span>
+            <span className="text-emerald-500">
+              {totalGlasses || calculateTotalGlasses(waterAmount, glassSize)}
+            </span>
+          </p>
         </div>
-      </form>
-      <div
-        className="capitalize flex flex-wrap gap-8 justify-around items-center xl:order-first"
-        title={`1 glass = ${glassSize}ml`}
-      >
-        <p className="inline-flex flex-col text-center items-center">
-          <span className="inline-flex items-center gap-2" title="Total intake">
-            {<FaGlassWhiskey className="w-20 h-20" />}{' '}
-          </span>
-          <span className="text-emerald-500">
-            {waterInML || literToMl(waterAmount)}ml
-          </span>
-        </p>
-        <p className="inline-flex flex-col text-center items-center">
-          <span className="inline-flex items-center gap-2" title="Total glass">
-            {<CiGlass className="w-20 h-20" />}{' '}
-          </span>
-          <span className="text-emerald-500">
-            {totalGlasses || calculateTotalGlasses(waterAmount, glassSize)}
-          </span>
-        </p>
       </div>
-      {notesArr?.map((glass) => (
-        <GoalNote key={`glass-${glass}`} idx={glass} />
-      ))}
-    </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-4 bg-white z-10 relative">
+        {notesArr?.map((glass) => (
+          <GoalNote key={`glass-${glass}`} idx={glass} />
+        ))}
+      </div>
+    </>
   );
 };
 
