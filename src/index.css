@@ -20,3 +20,13 @@ input:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s;
 }
 /*#endregion - end of - input autofill fix */
+
+input[type='range']::-webkit-slider-thumb {
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+  -webkit-transition-property: transform;
+  transition-property: transform;
+}
+input[type='range']::-webkit-slider-thumb:active {
+  transform: scale(1.75);
+}
