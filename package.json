@@ -11,10 +11,12 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
+    "deploy": "vite build && firebase deploy",
     "package-update": "ncu --interactive --format group"
   },
   "dependencies": {
     "@tanstack/react-query": "^4.20.4",
+    "firebase": "^9.15.0",
     "framer-motion": "^8.0.2",
     "moment": "^2.29.4",
     "react": "^18.2.0",
