@@ -104,8 +104,9 @@ const Goals = () => {
       Number(localStorage.getItem(GoalActionKind.GLASS_SIZE)) || 250
     ),
     notesArr:
-      JSON.parse(localStorage.getItem(GoalActionKind.CREATE_GOAL_NOTE) ?? '') ||
-      [],
+      JSON.parse(
+        localStorage.getItem(GoalActionKind.CREATE_GOAL_NOTE) ?? '[]'
+      ) || [],
   });
 
   const setGoal = (data: GoalFormData): void => {
