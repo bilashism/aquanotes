@@ -63,9 +63,9 @@ input[type='range']::-webkit-slider-thumb:active {
   width: 100%;
   z-index: 9;
 }
-.item:focus-within {
+/* .item:focus-within {
   pointer-events: none;
-}
+} */
 .item input ~ .task-msg {
   z-index: -10;
   top: 50%;
@@ -73,10 +73,11 @@ input[type='range']::-webkit-slider-thumb:active {
   transform: translateY(-50%);
   letter-spacing: 0.25rem;
   font-style: italic;
+  visibility: hidden;
   transition: all 0.3s ease-in-out;
 }
 .item input:checked ~ .task-msg {
-  color: var(--label-bg-2, red);
+  color: theme('colors.emerald.500');
   z-index: 10;
   pointer-events: none;
   -webkit-animation: fadeInOut 2s;
@@ -85,36 +86,44 @@ input[type='range']::-webkit-slider-thumb:active {
 @-webkit-keyframes fadeInOut {
   0% {
     opacity: 0;
+    visibility: hidden;
     transform: translate3d(30px, -50%, 0);
   }
   30% {
     opacity: 1;
+    visibility: visible;
     transform: translate3d(0, -50%, 0);
   }
   75% {
     opacity: 1;
+    visibility: visible;
     transform: translate3d(0, -50%, 0);
   }
   100% {
     opacity: 0;
+    visibility: hidden;
     transform: translate3d(-30px, -50%, 0);
   }
 }
 @keyframes fadeInOut {
   0% {
     opacity: 0;
+    visibility: hidden;
     transform: translate3d(30px, -50%, 0);
   }
   30% {
     opacity: 1;
+    visibility: visible;
     transform: translate3d(0, -50%, 0);
   }
   75% {
     opacity: 1;
+    visibility: visible;
     transform: translate3d(0, -50%, 0);
   }
   100% {
     opacity: 0;
+    visibility: hidden;
     transform: translate3d(-30px, -50%, 0);
   }
 }
@@ -125,11 +134,15 @@ input[type='range']::-webkit-slider-thumb:active {
   user-select: none;
   cursor: pointer;
 }
-.checkbox-label input:checked + .checkbox {
-  border-color: var(--txt-color, blue);
+.checkbox-label:focus-within {
+  outline: 2px solid theme('colors.emerald.500');
+}
+.checkbox-label input:checked + .checkbox,
+.checkbox-label:focus-within input + .checkbox {
+  border-color: theme('colors.emerald.500');
 }
 .checkbox-label input:checked + .checkbox svg path {
-  fill: var(--txt-color, blue);
+  fill: theme('colors.emerald.500');
 }
 .checkbox-label input:checked + .checkbox svg polyline {
   stroke-dashoffset: 0;
@@ -140,9 +153,8 @@ input[type='range']::-webkit-slider-thumb:active {
 .checkbox {
   width: 20px;
   height: 20px;
-  border: 2px solid var(--placeholder-color, darkRed);
+  border: 2px solid theme('colors.gray.200');
   border-radius: 3px;
-  box-shadow: var(--checkbox-shadow, green);
 }
 .checkbox svg {
   width: 20px;
@@ -153,7 +165,7 @@ input[type='range']::-webkit-slider-thumb:active {
 }
 .checkbox svg path {
   fill: none;
-  stroke: var(--txt-color, blue);
+  stroke: theme('colors.emerald.500');
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -163,7 +175,7 @@ input[type='range']::-webkit-slider-thumb:active {
 }
 .checkbox svg polyline {
   fill: none;
-  stroke: var(--bg-color, purple);
+  stroke: theme('colors.white');
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;

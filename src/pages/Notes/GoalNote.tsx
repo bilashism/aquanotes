@@ -42,7 +42,7 @@ const GoalNote: React.FC<{ idx: number }> = ({ idx }) => {
           <polyline points="4 11 8 15 16 6" />
         </svg>
       </div>
-      <p className="absolute text-sm hidden task-msg">Well done!</p>
+      <p className="absolute text-sm task-msg">Well done!</p>
     </label>
   );
 };
